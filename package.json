@@ -1,0 +1,42 @@
+{
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.18.1",
+    "prettier": "^1.11.0",
+    "rollup": "^0.56.3",
+    "uglify-js": "^3.3.12"
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "args": "none"
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "scripts": {
+    "build": "for path in ./src/*.js; do filename=${path##*/}; rollup -f iife -n \"$(echo \"${filename%.*}\" | perl -pe 's/(^|-)(\\w)/\\U$2/g')\" --no-color \"$path\" | babel -f ./dist/\"$filename\" -o ./dist/\"$filename\" && uglifyjs -cm -o ./dist/\"${filename%.*}\".min.js --source-map=\"base='./dist',url='${filename%.*}.min.js.map'\" ./dist/\"$filename\"; done; cp ./src/index.html ./dist",
+    "lint": "prettier --no-color --write --loglevel=warn './src/**/*.js' && eslint -f compact './src/**/*.js'",
+    "start": "python3 -m http.server",
+    "test": "echo TODO"
+  }
+}
