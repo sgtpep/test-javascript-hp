@@ -6,6 +6,8 @@ The compiled source code of components suitable for production use and compatibl
 
 The demonstation of components embedded to the origianl application built for production is located at `./demo`. See this demo: https://sgtpep.github.io/test-javascript-hp/demo/.
 
+Tests are located at `./test`. Run them in browser: https://sgtpep.github.io/test-javascript-hp/test/ (or run `npm start` locally and navigate to http://localhost:8000/test/). Open browser's console to see results.
+
 ## Commands
 
 - Checkout the source code and install development dependencies:
@@ -17,7 +19,6 @@ npm install
 - Start the local server to serve static files from http://localhost:8000/: `npm start`
 - Format and lint the source code: `npm run lint`
 - Build for production: `npm run build`
-- Run tests: `npm test`
 
 ## Requirements
 

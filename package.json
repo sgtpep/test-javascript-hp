@@ -35,8 +35,7 @@
   },
   "scripts": {
     "build": "for path in ./src/*.js; do filename=${path##*/}; rollup -f iife -n \"$(echo \"${filename%.*}\" | perl -pe 's/(^|-)(\\w)/\\U$2/g')\" --no-color \"$path\" | babel -f ./dist/\"$filename\" -o ./dist/\"$filename\" && uglifyjs -cm -o ./dist/\"${filename%.*}\".min.js --source-map=\"base='./dist',url='${filename%.*}.min.js.map'\" ./dist/\"$filename\"; done; cp ./src/index.html ./dist",
-    "lint": "prettier --no-color --write --loglevel=warn './src/**/*.js' && eslint -f compact './src/**/*.js'",
-    "start": "python3 -m http.server",
-    "test": "echo TODO"
+    "lint": "prettier --no-color --write --loglevel=warn './src/**/*.js' './test/**/*.js' && eslint -f compact './src/**/*.js' './test/**/*.js'",
+    "start": "python3 -m http.server"
   }
 }
