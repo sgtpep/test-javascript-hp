@@ -1,11 +1,14 @@
 export default class {
-  constructor(className) {
-    if (!className) throw 'No class argument';
-    this.class = className;
+  constructor(name) {
+    if (!name) throw 'No name argument';
+    this.name = name;
+    this.element = createElement(this.render());
+    this.elements = queryElements(this.element, name);
+    if (this.style) appendStyle(this.style());
+  }
 
-    if (this.style) appendStyle();
-    this.element = createElement();
-    this.elements = queryElements();
+  class(name = null, modifier = null) {
+    return this.name + (name ? `__${name}` : '') + (modifier ? `_${modifier}` : '');
   }
 
   render() {
@@ -13,8 +16,7 @@ export default class {
   }
 }
 
-const appendStyle = () => {
-  const css = this.style();
+const appendStyle = (css) => {
   if (
     !Array.from(document.head.querySelectorAll('style')).some(
       style => style.textContent == css
@@ -26,21 +28,26 @@ const appendStyle = () => {
   }
 };
 
-const createElement = () => {
+const createElement = (html) => {
   const element = document.createElement('div');
-  element.innerHTML = this.render();
+  element.innerHTML = html;
   return element.firstElementChild;
 };
 
-const queryElements = () => {
+const queryElements = (element, name) => {
   const elements = {};
-  Array.from(this.element.querySelectorAll(`[class^=${this.class}__]`)).forEach(
+  Array.from(element.querySelectorAll(`[class^=${name}__]`)).forEach(
     element => {
       const name = element.className.split('__', 2)[1].split('_', 1)[0];
-      if (!elements[name]) elements[name] = element;
-      else if (!Array.isArray(elements[name]))
+      if (!elements[name]) {
+        elements[name] = element;
+      }
+      else if (!Array.isArray(elements[name])) {
         elements[name] = [elements[name], element];
-      else elements[name].push(element);
+      }
+      else {
+        elements[name].push(element);
+      }
     }
   );
   return elements;

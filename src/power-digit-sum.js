@@ -14,20 +14,20 @@ export default class extends Component {
 
   render() {
     return `
-    <div class="${this.class}">
-      <div class="${this.class}__row">
-        <span class="${this.class}__base">2</span>
-        <input class="${
-          this.class
-        }__exponent" max="250" min="10" required type="number">
+    <div class="${this.class()}">
+      <div class="${this.class('row')}">
+        <span class="${this.class('base')}">2</span>
+        <input class="${this.class(
+          'exponent'
+        )}" max="250" min="10" required type="number">
       </div>
-      <div class="${this.class}__row">
-        <span class="${this.class}__label">Digit:</span>
-        <span class="${this.class}__power"></span>
+      <div class="${this.class('row')}">
+        <span class="${this.class('label')}">Digit:</span>
+        <span class="${this.class('power')}"></span>
       </div>
-      <div class="${this.class}__row">
-        <span class="${this.class}__label">Sum:</span>
-        <span class="${this.class}__sum"></span>
+      <div class="${this.class('row')}">
+        <span class="${this.class('label')}">Sum:</span>
+        <span class="${this.class('sum')}"></span>
       </div>
     </div>
     `;
@@ -35,10 +35,10 @@ export default class extends Component {
 
   style() {
     return `
-    .${this.class}__base {
+    .${this.class('base')} {
       font-size: larger;
     }
-    .${this.class}__exponent {
+    .${this.class('exponent')} {
       vertical-align: super;
     }
     `;
