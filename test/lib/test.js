@@ -6,6 +6,19 @@ export const assert = (assertion, message) => {
   }
 };
 
+export const changeValue = (element, value) => {
+  element.value = value;
+  dispatchEvent(element, 'change');
+  dispatchEvent(element, 'input');
+}
+
+export const dispatchEvent = (element, name, cancelable = true, bubbles = true) => {
+  cancelable = ['change', 'input'].includes(name) ? false : cancelable;
+  element.dispatchEvent(
+    new Event(name, { cancelable, bubbles })
+  );
+};
+
 export const group = (label, func) => {
   console.group(label);
   func();
