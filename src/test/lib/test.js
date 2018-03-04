@@ -12,14 +12,17 @@ export const changeValue = (element, value) => {
   dispatchEvent(element, 'input');
 };
 
-export const dispatchEvent = (
-  element,
-  name,
-  cancelable = true,
-  bubbles = true
-) => {
-  cancelable = ['change', 'input'].includes(name) ? false : cancelable;
-  element.dispatchEvent(new Event(name, { cancelable, bubbles }));
+export const compareObjects = (object1, object2) =>
+  JSON.stringify(object1) == JSON.stringify(object2);
+
+export const dispatchEvent = (element, name, params = {}) => {
+  element.dispatchEvent(
+    new (params.detail ? CustomEvent : Event)(name, {
+      bubbles: true,
+      cancelable: !['change', 'input'].includes(name),
+      ...params
+    })
+  );
 };
 
 export const group = (label, func) => {
