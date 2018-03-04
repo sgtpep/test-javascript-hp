@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,SACA,OAAA,KAGA,iBACA,UAAA,KACA,YAAA,IAGA,qBACA,MAAA,KACA,OAAA","file":"styles.min.css","sourcesContent":[".toolbar {\n    height: 64px;\n}\n\n.toolbar__header {\n    font-size: 36px;\n    font-weight: bold;\n}\n\n.component-container {\n    width:100%;\n    height: 300px;\n}\n"]}

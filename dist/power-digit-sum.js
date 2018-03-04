@@ -14,45 +14,23 @@ var PowerDigitSum = function () {
   'use strict';
 
   var Component = function () {
-    function Component(className) {
+    function Component(name) {
       _classCallCheck(this, Component);
 
-      if (!className) throw 'No class argument';
-      this.class = className;
-
-      if (this.style) this.createStyle();
-      this.element = this.createElement();
-      this.elements = this.queryElements();
+      if (!name) throw 'No name argument';
+      this.name = name;
+      this.element = createElement(this.render());
+      this.elements = queryElements(this.element, name);
+      if (this.style) appendStyle(this.style());
     }
 
     _createClass(Component, [{
-      key: 'createElement',
-      value: function createElement() {
-        var element = document.createElement('div');
-        element.innerHTML = this.render();
-        return element.firstElementChild;
-      }
-    }, {
-      key: 'createStyle',
-      value: function createStyle() {
-        var css = this.style();
-        if (!Array.from(document.head.querySelectorAll('style')).some(function (style) {
-          return style.textContent == css;
-        })) {
-          var style = document.createElement('style');
-          style.textContent = css;
-          document.head.appendChild(style);
-        }
-      }
-    }, {
-      key: 'queryElements',
-      value: function queryElements() {
-        var elements = {};
-        Array.from(this.element.querySelectorAll('[class^=' + this.class + '__]')).forEach(function (element) {
-          var name = element.className.split('__', 2)[1].split('_', 1)[0];
-          if (!elements[name]) elements[name] = element;else if (!Array.isArray(elements[name])) elements[name] = [elements[name], element];else elements[name].push(element);
-        });
-        return elements;
+      key: 'class',
+      value: function _class() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+        var modifier = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+        return this.name + (name ? '__' + name : '') + (modifier ? '_' + modifier : '');
       }
     }, {
       key: 'render',
@@ -63,6 +41,37 @@ var PowerDigitSum = function () {
 
     return Component;
   }();
+
+  var appendStyle = function appendStyle(css) {
+    if (!Array.from(document.head.querySelectorAll('style')).some(function (style) {
+      return style.textContent == css;
+    })) {
+      var style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+  };
+
+  var createElement = function createElement(html) {
+    var element = document.createElement('div');
+    element.innerHTML = html;
+    return element.firstElementChild;
+  };
+
+  var queryElements = function queryElements(element, name) {
+    var elements = {};
+    Array.from(element.querySelectorAll('[class^=' + name + '__]')).forEach(function (element) {
+      var name = element.className.split('__', 2)[1].split('_', 1)[0];
+      if (!elements[name]) {
+        elements[name] = element;
+      } else if (!Array.isArray(elements[name])) {
+        elements[name] = [elements[name], element];
+      } else {
+        elements[name].push(element);
+      }
+    });
+    return elements;
+  };
 
   var multiplyString = function multiplyString(multiplierString, multiplicand) {
     return ('0' + multiplierString).split('').reverse().reduce(function (_ref, digit) {
@@ -98,12 +107,12 @@ var PowerDigitSum = function () {
     _createClass(powerDigitSum, [{
       key: 'render',
       value: function render() {
-        return '\n    <div class="' + this.class + '">\n      <div class="' + this.class + '__row">\n        <span class="' + this.class + '__base">2</span>\n        <input class="' + this.class + '__exponent" max="250" min="10" required type="number">\n      </div>\n      <div class="' + this.class + '__row">\n        <span class="' + this.class + '__label">Digit:</span>\n        <span class="' + this.class + '__power"></span>\n      </div>\n      <div class="' + this.class + '__row">\n        <span class="' + this.class + '__label">Sum:</span>\n        <span class="' + this.class + '__sum"></span>\n      </div>\n    </div>\n    ';
+        return '\n    <div class="' + this.class() + '">\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('base') + '">2</span>\n        <input autofocus class="' + this.class('exponent') + '" max="250" min="10" required type="number">\n      </div>\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('label') + '">Digit:</span>\n        <span class="' + this.class('power') + '"></span>\n      </div>\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('label') + '">Sum:</span>\n        <span class="' + this.class('sum') + '"></span>\n      </div>\n    </div>\n    ';
       }
     }, {
       key: 'style',
       value: function style() {
-        return '\n    .' + this.class + '__base {\n      font-size: larger;\n    }\n    .' + this.class + '__exponent {\n      vertical-align: super;\n    }\n    ';
+        return '\n    .' + this.class('base') + ' {\n      font-size: larger;\n    }\n    .' + this.class('exponent') + ' {\n      vertical-align: super;\n    }\n    ';
       }
     }, {
       key: 'update',

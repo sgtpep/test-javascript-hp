@@ -1,0 +1,181 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PascalTriangle = function () {
+  'use strict';
+
+  var Component = function () {
+    function Component(name) {
+      _classCallCheck(this, Component);
+
+      if (!name) throw 'No name argument';
+      this.name = name;
+      this.element = createElement(this.render());
+      this.elements = queryElements(this.element, name);
+      if (this.style) appendStyle(this.style());
+    }
+
+    _createClass(Component, [{
+      key: 'class',
+      value: function _class() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+        var modifier = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+        return this.name + (name ? '__' + name : '') + (modifier ? '_' + modifier : '');
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        throw 'render() is not implemented';
+      }
+    }]);
+
+    return Component;
+  }();
+
+  var appendStyle = function appendStyle(css) {
+    if (!Array.from(document.head.querySelectorAll('style')).some(function (style) {
+      return style.textContent == css;
+    })) {
+      var style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+  };
+
+  var createElement = function createElement(html) {
+    var element = document.createElement('div');
+    element.innerHTML = html;
+    return element.firstElementChild;
+  };
+
+  var queryElements = function queryElements(element, name) {
+    var elements = {};
+    Array.from(element.querySelectorAll('[class^=' + name + '__]')).forEach(function (element) {
+      var name = element.className.split('__', 2)[1].split('_', 1)[0];
+      if (!elements[name]) {
+        elements[name] = element;
+      } else if (!Array.isArray(elements[name])) {
+        elements[name] = [elements[name], element];
+      } else {
+        elements[name].push(element);
+      }
+    });
+    return elements;
+  };
+
+  var cache = {};
+  var memoize = function memoize(func) {
+    return function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var key = JSON.stringify(args);
+      if (!cache[key]) {
+        cache[key] = func.apply(undefined, args);
+      }
+      return cache[key];
+    };
+  };
+
+  var PascalTriangleEntry = function (_Component) {
+    _inherits(PascalTriangleEntry, _Component);
+
+    function PascalTriangleEntry(row, column) {
+      _classCallCheck(this, PascalTriangleEntry);
+
+      var _this = _possibleConstructorReturn(this, (PascalTriangleEntry.__proto__ || Object.getPrototypeOf(PascalTriangleEntry)).call(this, 'pascal-triangle-entry'));
+
+      _this.element.textContent = getPascalTriangleLine(row)[column];
+      return _this;
+    }
+
+    _createClass(PascalTriangleEntry, [{
+      key: 'render',
+      value: function render() {
+        return '<span class="' + this.class() + '"></span>';
+      }
+    }, {
+      key: 'style',
+      value: function style() {
+        return '\n    .' + this.class() + ' {\n      display: inline-block;\n      min-width: 1.5em;\n      padding: 0 0.2em;\n      text-align: center;\n    }\n    ';
+      }
+    }]);
+
+    return PascalTriangleEntry;
+  }(Component);
+
+  var getPascalTriangleLine = memoize(function (row) {
+    return row == 0 ? [1] : [0].concat(getPascalTriangleLine(row - 1)).map(function (value, index, values) {
+      return value + (values[index + 1] || 0);
+    });
+  });
+
+  var pascalTriangle = function (_Component2) {
+    _inherits(pascalTriangle, _Component2);
+
+    function pascalTriangle() {
+      _classCallCheck(this, pascalTriangle);
+
+      var _this2 = _possibleConstructorReturn(this, (pascalTriangle.__proto__ || Object.getPrototypeOf(pascalTriangle)).call(this, 'pascal-triangle'));
+
+      _this2.elements.height.addEventListener('input', function (event) {
+        _this2.update(event.target.validity.valid ? parseInt(event.target.value, 10) : 0);
+      });
+      return _this2;
+    }
+
+    _createClass(pascalTriangle, [{
+      key: 'createLine',
+      value: function createLine() {
+        var line = document.createElement('div');
+        line.className = this.class('triangle-line');
+        return line;
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return '\n    <div class="' + this.class() + '">\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('label') + '">Triangle height:</span>\n        <input autofocus class="' + this.class('height') + '" max="50" min="2" required type="number">\n      </div>\n      <div class="' + this.class('triangle') + '"></div>\n    </div>\n    ';
+      }
+    }, {
+      key: 'style',
+      value: function style() {
+        return '\n    .' + this.class('triangle') + ' {\n      display: table;\n      width: 100%;\n    }\n    .' + this.class('triangle-line') + ' {\n      text-align: center;\n      white-space: nowrap;\n    }\n    ';
+      }
+    }, {
+      key: 'update',
+      value: function update(height) {
+        var _this3 = this;
+
+        if (this.elements.triangle.childElementCount > height) {
+          Array.from(Array(this.elements.triangle.childElementCount - height)).forEach(function () {
+            return _this3.elements.triangle.removeChild(_this3.elements.triangle.lastElementChild);
+          });
+        } else if (this.elements.triangle.childElementCount < height) {
+          var fragment = document.createDocumentFragment();
+          Array.from(Array(height - this.elements.triangle.childElementCount)).forEach(function (_, index) {
+            var row = _this3.elements.triangle.childElementCount + index;
+            var line = _this3.createLine();
+            Array.from(Array(row + 1)).forEach(function (value, column) {
+              line.appendChild(new PascalTriangleEntry(row, column).element);
+            });
+            fragment.appendChild(line);
+          });
+          this.elements.triangle.appendChild(fragment);
+        }
+      }
+    }]);
+
+    return pascalTriangle;
+  }(Component);
+
+  return pascalTriangle;
+}();
