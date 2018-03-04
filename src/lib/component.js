@@ -4,7 +4,7 @@ export default class Component {
     this.name = name;
     this.element = createElement(this, this.render());
     this.elements = queryElements(this.element, name);
-    if (this.data != null) this.data = data;
+    if (data != null) this.data = data;
     if (this.style) appendStyle(this.style());
     this.element.addEventListener(
       'set-data',
