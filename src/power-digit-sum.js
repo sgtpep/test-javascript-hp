@@ -17,7 +17,7 @@ export default class extends Component {
     <div class="${this.class()}">
       <div class="${this.class('row')}">
         <span class="${this.class('base')}">2</span>
-        <input class="${this.class(
+        <input autofocus class="${this.class(
           'exponent'
         )}" max="250" min="10" required type="number">
       </div>
