@@ -1,7 +1,7 @@
 import Component from './lib/component.js';
 import powerString from './lib/power-string.js';
 
-export default class extends Component {
+export default class PowerDigitSum extends Component {
   constructor() {
     super('digit-sum');
     this.elements.exponent.addEventListener('input', event => {

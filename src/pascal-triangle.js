@@ -1,7 +1,7 @@
 import Component from './lib/component.js';
 import PascalTriangleEntry from './lib/pascal-triangle-entry.js';
 
-export default class extends Component {
+export default class PascalTriangle extends Component {
   constructor() {
     super('pascal-triangle');
     this.elements.height.addEventListener('input', event => {

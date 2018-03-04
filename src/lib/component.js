@@ -1,4 +1,4 @@
-export default class {
+export default class Component {
   constructor(name) {
     if (!name) throw 'No name argument';
     this.name = name;

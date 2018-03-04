@@ -1,7 +1,7 @@
 import Component from '../lib/component.js';
 import memoize from './memoize.js';
 
-export default class extends Component {
+export default class PascalTriangleEntry extends Component {
   constructor(row, column) {
     super('pascal-triangle-entry');
     this.element.textContent = getPascalTriangleLine(row)[column];
