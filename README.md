@@ -20,6 +20,30 @@ npm install
 - Format and lint the source code: `npm run lint`
 - Build for production: `npm run build`
 
+## Component usage
+
+Create a component and attach it to DOM:
+```
+import ExampleComponent from './src/example-component.js';
+const component = new ExampleComponent();
+element.appendChild(component.element);
+```
+
+A component object is accessible from its corresponding DOM element using the `component` property:
+```
+const element = document.querySelector('.example-component');
+console.log(element.component);
+```
+
+Some components allow to get or set their state with the `data` property. Also they accept `data` as the first argument in a constructor and react on the custom event `set-data`:
+```
+const data = { foo: 'bar' };
+const component = new ExampleComponent(data);
+console.log(component.data);
+component.data = { foo: 'baz' };
+element.dispatchEvent(new CustomEvent('set-data', { bubbles: true, detail: { foo: 'qux' } }));
+```
+
 ## Requirements
 
 1. Create `comments block` component. Component represents scrollable area with user comments, each list item shows user name, comment creation date and text of the comment. At the bottom of the component place comment input form with two fields, user name and user comment text and button 'Send'. Pressing 'Send' button will add new comment to the existing list of comments. Upon request from parent, component should send JSON data with comments. Also parent component can send data to the component and it should be able to parse and show the data properly.
