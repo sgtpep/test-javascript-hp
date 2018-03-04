@@ -21,8 +21,19 @@ group('PascalTriangle', () => {
   test('shows triangle of height 5', () => {
     changeValue(component.elements.height, 5);
     assert(component.elements.height.validity.valid);
-    const values = Array.from(component.elements.triangle.children).map((element) => Array.from(element.children).map((element) => parseInt(element.textContent)));
-    const expectedValues = [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]];
+    const values = Array.from(component.elements.triangle.children).map(
+      element =>
+        Array.from(element.children).map(element =>
+          parseInt(element.textContent)
+        )
+    );
+    const expectedValues = [
+      [1],
+      [1, 1],
+      [1, 2, 1],
+      [1, 3, 3, 1],
+      [1, 4, 6, 4, 1]
+    ];
     assert(JSON.stringify(values) == JSON.stringify(expectedValues));
   });
 
@@ -30,13 +41,17 @@ group('PascalTriangle', () => {
     changeValue(component.elements.height, 50);
     assert(component.elements.height.validity.valid);
     assert(component.elements.triangle.childElementCount == 50);
-    assert(component.elements.triangle.children[50 - 1].childElementCount == 50);
+    assert(
+      component.elements.triangle.children[50 - 1].childElementCount == 50
+    );
   });
 
   test('removes excessive lines for triangle of height 10', () => {
     changeValue(component.elements.height, 10);
     assert(component.elements.height.validity.valid);
     assert(component.elements.triangle.childElementCount == 10);
-    assert(component.elements.triangle.children[10 - 1].childElementCount == 10);
+    assert(
+      component.elements.triangle.children[10 - 1].childElementCount == 10
+    );
   });
 });
