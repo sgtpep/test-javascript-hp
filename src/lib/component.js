@@ -8,7 +8,9 @@ export default class {
   }
 
   class(name = null, modifier = null) {
-    return this.name + (name ? `__${name}` : '') + (modifier ? `_${modifier}` : '');
+    return (
+      this.name + (name ? `__${name}` : '') + (modifier ? `_${modifier}` : '')
+    );
   }
 
   render() {
@@ -16,7 +18,7 @@ export default class {
   }
 }
 
-const appendStyle = (css) => {
+const appendStyle = css => {
   if (
     !Array.from(document.head.querySelectorAll('style')).some(
       style => style.textContent == css
@@ -28,7 +30,7 @@ const appendStyle = (css) => {
   }
 };
 
-const createElement = (html) => {
+const createElement = html => {
   const element = document.createElement('div');
   element.innerHTML = html;
   return element.firstElementChild;
@@ -41,11 +43,9 @@ const queryElements = (element, name) => {
       const name = element.className.split('__', 2)[1].split('_', 1)[0];
       if (!elements[name]) {
         elements[name] = element;
-      }
-      else if (!Array.isArray(elements[name])) {
+      } else if (!Array.isArray(elements[name])) {
         elements[name] = [elements[name], element];
-      }
-      else {
+      } else {
         elements[name].push(element);
       }
     }
