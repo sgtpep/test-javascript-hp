@@ -1,12 +1,14 @@
 # Components for test assignment
 
+Note: this repository contains compiled source files only to host them using GitHub Pages, otherwise they should be excluded using `.gitignore`.
+
 The source code of components in a form of ES2015 modules is located at `./src`. Components can be used without compilation/processing in the recent versions of modern browsers for development/test purposes. See the development version of components: https://sgtpep.github.io/test-javascript-hp/src/ (or run `npm start` locally and navigate to http://localhost:8000/src/).
 
 The compiled source code of components suitable for production use and compatible with legacy browsers is located at `./dist`. See the production-ready version of components: https://sgtpep.github.io/test-javascript-hp/dist/.
 
 The demonstation of components embedded to the origianl application built for production is located at `./demo`. See this demo: https://sgtpep.github.io/test-javascript-hp/demo/.
 
-Tests are located at `./test`. Run them in browser: https://sgtpep.github.io/test-javascript-hp/test/ (or run `npm start` locally and navigate to http://localhost:8000/test/). Open browser's console to see results.
+Tests are located at `./dist/test`. Run them in browser: https://sgtpep.github.io/test-javascript-hp/dist/test/ (or run `npm start` locally and navigate to http://localhost:8000/dist/test/). Open browser's console to see results.
 
 ## Commands
 
