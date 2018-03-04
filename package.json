@@ -39,7 +39,7 @@
     "singleQuote": true
   },
   "scripts": {
-    "build": "for path in ./src/*.js; do filename=${path##*/}; rollup -f iife -n \"$(echo \"${filename%.*}\" | perl -pe 's/(^|-)(\\w)/\\U$2/g')\" --no-color \"$path\" | babel -f ./dist/\"$filename\" -o ./dist/\"$filename\" && uglifyjs -cm -o ./dist/\"${filename%.*}\".min.js --source-map=\"base='./dist',url='${filename%.*}.min.js.map'\" ./dist/\"$filename\"; done; cp ./src/index.html ./dist",
+    "build": "cd ./src; for path in ./*.js ./test/*.js; do filename=${path##*/}; rollup -f iife -n \"$(echo \"${filename%.*}\" | perl -pe 's/(^|-)(\\w)/\\U$2/g')\" --no-color \"$path\" 2> /dev/null | babel -f ../dist/\"$path\" -o ../dist/\"$path\" && uglifyjs -cm -o ../dist/\"${path%.*}\".min.js --source-map=\"base='../dist',url='${filename%.*}.min.js.map'\" ../dist/\"$path\"; done; cp ./index.html ../dist",
     "lint": "prettier --no-color --write './src/**/*.js' './test/**/*.js' > /dev/null 2>&1; eslint -f compact './src/**/*.js' './test/**/*.js'",
     "start": "python3 -m http.server"
   }
