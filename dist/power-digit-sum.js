@@ -15,13 +15,21 @@ var PowerDigitSum = function () {
 
   var Component = function () {
     function Component(name) {
+      var _this = this;
+
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
       _classCallCheck(this, Component);
 
       if (!name) throw 'No name argument';
       this.name = name;
-      this.element = createElement(this.render());
+      this.element = createElement(this, this.render());
       this.elements = queryElements(this.element, name);
+      if (data != null) this.data = data;
       if (this.style) appendStyle(this.style());
+      this.element.addEventListener('set-data', function (event) {
+        return _this.data = event.detail;
+      });
     }
 
     _createClass(Component, [{
@@ -36,6 +44,14 @@ var PowerDigitSum = function () {
       key: 'render',
       value: function render() {
         throw 'render() is not implemented';
+      }
+    }, {
+      key: 'data',
+      get: function get() {
+        throw 'get data() is not implemented';
+      },
+      set: function set(value) {
+        throw 'set data() is not implemented';
       }
     }]);
 
@@ -52,23 +68,28 @@ var PowerDigitSum = function () {
     }
   };
 
-  var createElement = function createElement(html) {
+  var createElement = function createElement(component, html) {
     var element = document.createElement('div');
     element.innerHTML = html;
+    element.firstElementChild.component = component;
     return element.firstElementChild;
   };
 
   var queryElements = function queryElements(element, name) {
     var elements = {};
     Array.from(element.querySelectorAll('[class^=' + name + '__]')).forEach(function (element) {
-      var name = element.className.split('__', 2)[1].split('_', 1)[0];
-      if (!elements[name]) {
-        elements[name] = element;
-      } else if (!Array.isArray(elements[name])) {
-        elements[name] = [elements[name], element];
-      } else {
-        elements[name].push(element);
-      }
+      Array.from(element.classList).forEach(function (className) {
+        var name = className.split('__', 2)[1].split('_', 1)[0].replace(/-(.)/g, function (match, char) {
+          return char.toUpperCase();
+        });
+        if (!elements[name]) {
+          elements[name] = element;
+        } else if (!Array.isArray(elements[name])) {
+          elements[name] = [elements[name], element];
+        } else {
+          elements[name].push(element);
+        }
+      });
     });
     return elements;
   };
@@ -90,21 +111,21 @@ var PowerDigitSum = function () {
     }, '1');
   };
 
-  var powerDigitSum = function (_Component) {
-    _inherits(powerDigitSum, _Component);
+  var PowerDigitSum = function (_Component) {
+    _inherits(PowerDigitSum, _Component);
 
-    function powerDigitSum() {
-      _classCallCheck(this, powerDigitSum);
+    function PowerDigitSum() {
+      _classCallCheck(this, PowerDigitSum);
 
-      var _this = _possibleConstructorReturn(this, (powerDigitSum.__proto__ || Object.getPrototypeOf(powerDigitSum)).call(this, 'digit-sum'));
+      var _this2 = _possibleConstructorReturn(this, (PowerDigitSum.__proto__ || Object.getPrototypeOf(PowerDigitSum)).call(this, 'digit-sum'));
 
-      _this.elements.exponent.addEventListener('input', function (event) {
-        _this.update(parseInt(event.target.value, 10), event.target.validity.valid);
+      _this2.elements.exponent.addEventListener('input', function (event) {
+        _this2.update(parseInt(event.target.value, 10), event.target.validity.valid);
       });
-      return _this;
+      return _this2;
     }
 
-    _createClass(powerDigitSum, [{
+    _createClass(PowerDigitSum, [{
       key: 'render',
       value: function render() {
         return '\n    <div class="' + this.class() + '">\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('base') + '">2</span>\n        <input autofocus class="' + this.class('exponent') + '" max="250" min="10" required type="number">\n      </div>\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('label') + '">Digit:</span>\n        <span class="' + this.class('power') + '"></span>\n      </div>\n      <div class="' + this.class('row') + '">\n        <span class="' + this.class('label') + '">Sum:</span>\n        <span class="' + this.class('sum') + '"></span>\n      </div>\n    </div>\n    ';
@@ -125,8 +146,8 @@ var PowerDigitSum = function () {
       }
     }]);
 
-    return powerDigitSum;
+    return PowerDigitSum;
   }(Component);
 
-  return powerDigitSum;
+  return PowerDigitSum;
 }();

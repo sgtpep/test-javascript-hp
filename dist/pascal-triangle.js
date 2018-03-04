@@ -13,13 +13,21 @@ var PascalTriangle = function () {
 
   var Component = function () {
     function Component(name) {
+      var _this = this;
+
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
       _classCallCheck(this, Component);
 
       if (!name) throw 'No name argument';
       this.name = name;
-      this.element = createElement(this.render());
+      this.element = createElement(this, this.render());
       this.elements = queryElements(this.element, name);
+      if (data != null) this.data = data;
       if (this.style) appendStyle(this.style());
+      this.element.addEventListener('set-data', function (event) {
+        return _this.data = event.detail;
+      });
     }
 
     _createClass(Component, [{
@@ -34,6 +42,14 @@ var PascalTriangle = function () {
       key: 'render',
       value: function render() {
         throw 'render() is not implemented';
+      }
+    }, {
+      key: 'data',
+      get: function get() {
+        throw 'get data() is not implemented';
+      },
+      set: function set(value) {
+        throw 'set data() is not implemented';
       }
     }]);
 
@@ -50,23 +66,28 @@ var PascalTriangle = function () {
     }
   };
 
-  var createElement = function createElement(html) {
+  var createElement = function createElement(component, html) {
     var element = document.createElement('div');
     element.innerHTML = html;
+    element.firstElementChild.component = component;
     return element.firstElementChild;
   };
 
   var queryElements = function queryElements(element, name) {
     var elements = {};
     Array.from(element.querySelectorAll('[class^=' + name + '__]')).forEach(function (element) {
-      var name = element.className.split('__', 2)[1].split('_', 1)[0];
-      if (!elements[name]) {
-        elements[name] = element;
-      } else if (!Array.isArray(elements[name])) {
-        elements[name] = [elements[name], element];
-      } else {
-        elements[name].push(element);
-      }
+      Array.from(element.classList).forEach(function (className) {
+        var name = className.split('__', 2)[1].split('_', 1)[0].replace(/-(.)/g, function (match, char) {
+          return char.toUpperCase();
+        });
+        if (!elements[name]) {
+          elements[name] = element;
+        } else if (!Array.isArray(elements[name])) {
+          elements[name] = [elements[name], element];
+        } else {
+          elements[name].push(element);
+        }
+      });
     });
     return elements;
   };
@@ -92,10 +113,10 @@ var PascalTriangle = function () {
     function PascalTriangleEntry(row, column) {
       _classCallCheck(this, PascalTriangleEntry);
 
-      var _this = _possibleConstructorReturn(this, (PascalTriangleEntry.__proto__ || Object.getPrototypeOf(PascalTriangleEntry)).call(this, 'pascal-triangle-entry'));
+      var _this2 = _possibleConstructorReturn(this, (PascalTriangleEntry.__proto__ || Object.getPrototypeOf(PascalTriangleEntry)).call(this, 'pascal-triangle-entry'));
 
-      _this.element.textContent = getPascalTriangleLine(row)[column];
-      return _this;
+      _this2.element.textContent = getPascalTriangleLine(row)[column];
+      return _this2;
     }
 
     _createClass(PascalTriangleEntry, [{
@@ -119,21 +140,21 @@ var PascalTriangle = function () {
     });
   });
 
-  var pascalTriangle = function (_Component2) {
-    _inherits(pascalTriangle, _Component2);
+  var PascalTriangle = function (_Component2) {
+    _inherits(PascalTriangle, _Component2);
 
-    function pascalTriangle() {
-      _classCallCheck(this, pascalTriangle);
+    function PascalTriangle() {
+      _classCallCheck(this, PascalTriangle);
 
-      var _this2 = _possibleConstructorReturn(this, (pascalTriangle.__proto__ || Object.getPrototypeOf(pascalTriangle)).call(this, 'pascal-triangle'));
+      var _this3 = _possibleConstructorReturn(this, (PascalTriangle.__proto__ || Object.getPrototypeOf(PascalTriangle)).call(this, 'pascal-triangle'));
 
-      _this2.elements.height.addEventListener('input', function (event) {
-        _this2.update(event.target.validity.valid ? parseInt(event.target.value, 10) : 0);
+      _this3.elements.height.addEventListener('input', function (event) {
+        _this3.update(event.target.validity.valid ? parseInt(event.target.value, 10) : 0);
       });
-      return _this2;
+      return _this3;
     }
 
-    _createClass(pascalTriangle, [{
+    _createClass(PascalTriangle, [{
       key: 'createLine',
       value: function createLine() {
         var line = document.createElement('div');
@@ -153,17 +174,17 @@ var PascalTriangle = function () {
     }, {
       key: 'update',
       value: function update(height) {
-        var _this3 = this;
+        var _this4 = this;
 
         if (this.elements.triangle.childElementCount > height) {
           Array.from(Array(this.elements.triangle.childElementCount - height)).forEach(function () {
-            return _this3.elements.triangle.removeChild(_this3.elements.triangle.lastElementChild);
+            return _this4.elements.triangle.removeChild(_this4.elements.triangle.lastElementChild);
           });
         } else if (this.elements.triangle.childElementCount < height) {
           var fragment = document.createDocumentFragment();
           Array.from(Array(height - this.elements.triangle.childElementCount)).forEach(function (_, index) {
-            var row = _this3.elements.triangle.childElementCount + index;
-            var line = _this3.createLine();
+            var row = _this4.elements.triangle.childElementCount + index;
+            var line = _this4.createLine();
             Array.from(Array(row + 1)).forEach(function (value, column) {
               line.appendChild(new PascalTriangleEntry(row, column).element);
             });
@@ -174,8 +195,8 @@ var PascalTriangle = function () {
       }
     }]);
 
-    return pascalTriangle;
+    return PascalTriangle;
   }(Component);
 
-  return pascalTriangle;
+  return PascalTriangle;
 }();
